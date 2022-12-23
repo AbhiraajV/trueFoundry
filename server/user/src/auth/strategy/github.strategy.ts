@@ -2,10 +2,12 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy as GH_Strategy } from 'passport-github';
+import { AuthService } from '../auth.service';
+import { VerifyCallback } from 'passport-jwt';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(GH_Strategy, 'github') {
-  constructor(configService: ConfigService) {
+  constructor(configService: ConfigService, private authService: AuthService) {
     super({
       clientID: configService.get<string>('GITHUB_CLIENT_ID'),
       clientSecret: configService.get<string>('GITHUB_CLIENT_SECRET'),
@@ -15,7 +17,7 @@ export class GithubStrategy extends PassportStrategy(GH_Strategy, 'github') {
   }
 
   async validate(accessToken: string, _refreshToken: string, profile: Profile) {
-    console.log({ profile, accessToken, _refreshToken });
-    return profile;
+    // this.authService.createGhCreds({gh_key})
+    return { data: { profile, accessToken, _refreshToken } };
   }
 }

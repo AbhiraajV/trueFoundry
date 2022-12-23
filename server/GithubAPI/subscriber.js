@@ -36,20 +36,33 @@ export const SubscribeToMessages = async (channel, service) => {
       console.log(data.content.toString());
 
       console.log("\n \n ======== Calling Requested Service ======== \n \n");
+
       await service(data.content.toString())
         .then(async (res) => {
           console.log({ res });
           if (res.ackMsg) {
             channel.ack(data);
+            const {
+              data: {
+                event,
+                data: { email },
+              },
+            } = JSON.parse(data.content.toString());
             console.log(
               "\n \n ======== Acknowledged Requested Service ======== \n \n"
+            );
+
+            console.log(
+              "\n \n ======== Publishing Mail Service for " +
+                email +
+                "======== \n \n"
             );
             await PublishMessages(
               channel,
               JSON.stringify({
                 event: "SEND_REPO_CREATION_MAIL",
                 data: {
-                  receiver_mail: "abhiraajverma@gmail.com",
+                  receiver_mail: email,
                 },
               })
             );

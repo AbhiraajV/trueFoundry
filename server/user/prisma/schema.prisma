@@ -18,20 +18,18 @@ model User {
   email    String @unique
   password String
 
-  firstName String
-  lastName  String?
-  bookmarks Bookmark[]
+  githubCred GithubCreds?
 }
 
-model Bookmark {
+model GithubCreds {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  title       String
-  description String?
-  link        String
+  gh_key             String
+  gh_username        String
+  gh_generated_token String @unique
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique
 }

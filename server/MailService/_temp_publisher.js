@@ -1,4 +1,4 @@
-USE PUBLISHER IN GH_SERVICE
+// USE PUBLISHER IN GH_SERVICE
 // import * as amqp from "amqplib";
 
 // const rbq_connection_uri =
